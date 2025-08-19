@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vue formulaire pour les lignes de produits -->
+        <record id="intervention_product_line_form_view" model="ir.ui.view">
+            <field name="name">intervention.product.line.form</field>
+            <field name="model">intervention.product.line</field>
+            <field name="arch" type="xml">
+                <form string="Pièce utilisée">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="ticket_id" readonly="1"/>
+                                <field name="product_id"/>
+                                <field name="quantity"/>
+                            </group>
+                            <group>
+                                <field name="unit_price" readonly="1"/>
+                                <field name="subtotal" readonly="1"/>
+                                <field name="stock_move_id" readonly="1" groups="stock.group_stock_user"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste pour les lignes de produits -->
+        <record id="intervention_product_line_tree_view" model="ir.ui.view">
+            <field name="name">intervention.product.line.tree</field>
+            <field name="model">intervention.product.line</field>
+            <field name="arch" type="xml">
+                <tree string="Pièces utilisées" editable="bottom">
+                    <field name="ticket_id" readonly="1"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="unit_price" readonly="1"/>
+                    <field name="subtotal" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action pour les lignes de produits -->
+        <record id="action_intervention_product_lines" model="ir.actions.act_window">
+            <field name="name">Pièces utilisées - Interventions</field>
+            <field name="res_model">intervention.product.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

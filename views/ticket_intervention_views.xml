@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vue formulaire étendue pour les tickets d'intervention -->
+        <record id="helpdesk_ticket_intervention_form_view" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.intervention.form</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='priority']" position="after">
+                    <field name="is_intervention"/>
+                    <field name="urgency_level" attrs="{'invisible': [('is_intervention', '=', False)]}"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="assigned_technician_id" attrs="{'invisible': [('is_intervention', '=', False)]}"/>
+                </xpath>
+
+                <xpath expr="//field[@name='description']" position="after">
+                    <group attrs="{'invisible': [('is_intervention', '=', False)]}" string="Informations d'intervention">
+                        <field name="intervention_address"/>
+                        <field name="intervention_date"/>
+                        <field name="intervention_start"/>
+                        <field name="intervention_end"/>
+                        <field name="intervention_duration" readonly="1"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Pièces utilisées" attrs="{'invisible': [('is_intervention', '=', False)]}">
+                        <field name="product_line_ids">
+                            <tree editable="bottom">
+                                <field name="product_id"/>
+                                <field name="quantity"/>
+                                <field name="unit_price" readonly="1"/>
+                                <field name="subtotal" readonly="1"/>
+                            </tree>
+                        </field>
+                        <group>
+                            <field name="total_product_cost" readonly="1"/>
+                        </group>
+                    </page>
+                    
+                    <page string="Rapport d'intervention" attrs="{'invisible': [('is_intervention', '=', False)]}">
+                        <group>
+                            <field name="technician_notes" placeholder="Notes du technicien..."/>
+                            <field name="client_signature" widget="image"/>
+                            <field name="client_signature_date" readonly="1"/>
+                        </group>
+                    </page>
+                    
+                    <page string="Facturation" attrs="{'invisible': [('is_intervention', '=', False)]}">
+                        <group>
+                            <field name="invoice_created" readonly="1"/>
+                            <field name="invoice_id" readonly="1" attrs="{'invisible': [('invoice_created', '=', False)]}"/>
+                        </group>
+                    </page>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button name="action_start_intervention" 
+                            string="Démarrer intervention" 
+                            type="object" 
+                            class="btn-primary"
+                            attrs="{'invisible': ['|', ('is_intervention', '=', False), ('intervention_start', '!=', False)]}"/>
+                    
+                    <button name="action_complete_intervention" 
+                            string="Terminer intervention" 
+                            type="object" 
+                            class="btn-success"
+                            attrs="{'invisible': ['|', ('is_intervention', '=', False), ('intervention_end', '!=', False)]}"/>
+                    
+                    <button name="action_generate_invoice" 
+                            string="Générer facture" 
+                            type="object" 
+                            class="btn-warning"
+                            attrs="{'invisible': ['|', ('is_intervention', '=', False), ('invoice_created', '=', True)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Vue liste pour les interventions -->
+        <record id="helpdesk_ticket_intervention_tree_view" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.intervention.tree</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <tree string="Interventions">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="urgency_level"/>
+                    <field name="assigned_technician_id"/>
+                    <field name="intervention_date"/>
+                    <field name="stage_id"/>
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue kanban pour les interventions -->
+        <record id="helpdesk_ticket_intervention_kanban_view" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.intervention.kanban</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="urgency_level"/>
+                    <field name="assigned_technician_id"/>
+                    <field name="intervention_date"/>
+                    <field name="stage_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="oe_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                        </div>
+                                        <div class="o_kanban_record_top_right">
+                                            <span t-if="record.urgency_level.raw_value == 'critical'" class="badge badge-danger">Critique</span>
+                                            <span t-if="record.urgency_level.raw_value == 'high'" class="badge badge-warning">Urgent</span>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <field name="partner_id"/>
+                                        <br/>
+                                        <span t-if="record.assigned_technician_id.raw_value">
+                                            <i class="fa fa-user"/> <field name="assigned_technician_id"/>
+                                        </span>
+                                        <br/>
+                                        <span t-if="record.intervention_date.raw_value">
+                                            <i class="fa fa-calendar"/> <field name="intervention_date"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+    </data>
+</odoo>
