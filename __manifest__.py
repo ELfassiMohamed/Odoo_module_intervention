@@ -3,18 +3,6 @@
     'version': '17.0.1.0.0',
     'category': '',
     'summary': 'Gestion des interventions techniques basée sur HelpDesk',
-    'description': """
-        Module de gestion des interventions techniques
-        =============================================
-        
-        * Extension du module HelpDesk pour les interventions sur site
-        * Attribution automatique des techniciens
-        * Gestion des pièces de rechange
-        * Signature numérique client
-        * Génération automatique de factures
-        
-        Cas d'usage: Maintenance climatiseurs, réparations, installations
-    """,
     'author': 'EL FASSI Mohamed',
    'depends': [
         'helpdesk',
@@ -37,6 +25,7 @@
         'views/intervention_technician_views.xml',
         'views/intervention_product_line_views.xml',
         'views/intervention_menus.xml',
+        'views/res_partner_views.xml',
     ],
     'demo': [
         'demo/intervention_demo.xml',
