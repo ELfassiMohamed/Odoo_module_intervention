@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vue formulaire -->
+        <record id="view_intervention_request_form" model="ir.ui.view">
+            <field name="name">intervention.request.form</field>
+            <field name="model">intervention.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_assign" string="Assigner" type="object" 
+                                class="oe_highlight" states="draft" 
+                                groups="intervention_management.group_intervention_dispatcher"/>
+                        <button name="action_start" string="Démarrer" type="object" 
+                                class="oe_highlight" states="assigned" 
+                                groups="intervention_management.group_intervention_technician"/>
+                        <button name="action_complete" string="Terminer" type="object" 
+                                class="oe_highlight" states="in_progress" 
+                                groups="intervention_management.group_intervention_technician"/>
+                        <button name="action_create_invoice" string="Facturer" type="object" 
+                                class="oe_highlight" states="completed" 
+                                groups="intervention_management.group_intervention_dispatcher"/>
+                        <button name="action_cancel" string="Annuler" type="object" 
+                                states="draft,assigned"/>
+                        <field name="state" widget="statusbar" 
+                               statusbar_visible="draft,assigned,in_progress,completed,invoiced"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="title" placeholder="Titre de l'intervention"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="category_id"/>
+                                <field name="priority" widget="priority"/>
+                                <field name="scheduled_date"/>
+                                <field name="estimated_duration" widget="float_time"/>
+                            </group>
+                            <group>
+                                <field name="technician_id"/>
+                                <field name="dispatcher_id" readonly="1"/>
+                                <field name="start_date" readonly="1"/>
+                                <field name="end_date" readonly="1"/>
+                                <field name="actual_duration" widget="float_time" readonly="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                            <page string="Contact">
+                                <group>
+                                    <field name="contact_name"/>
+                                    <field name="contact_phone" widget="phone"/>
+                                    <field name="contact_email" widget="email"/>
+                                </group>
+                            </page>
+                            <page string="Notes du technicien">
+                                <field name="technician_notes"/>
+                            </page>
+                            <page string="Matériel utilisé">
+                                <field name="product_ids" widget="many2many_tags"/>
+                            </page>
+                            <page string="Facturation">
+                                <group>
+                                    <field name="hourly_rate"/>
+                                    <field name="labor_cost" readonly="1"/>
+                                    <field name="material_cost" readonly="1"/>
+                                    <field name="total_cost" readonly="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="invoice_id" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Signature" states="completed,invoiced">
+                                <group>
+                                    <field name="client_signature" widget="image"/>
+                                    <field name="signature_date"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vue liste -->
+        <record id="view_intervention_request_tree" model="ir.ui.view">
+            <field name="name">intervention.request.tree</field>
+            <field name="model">intervention.request</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="priority == '3'" 
+                      decoration-warning="priority == '2'" 
+                      decoration-info="state == 'in_progress'">
+                    <field name="title"/>
+                    <field name="partner_id"/>
+                    <field name="category_id"/>
+                    <field name="priority" widget="priority"/>
+                    <field name="technician_id"/>
+                    <field name="scheduled_date"/>
+                    <field name="state" widget="badge"/>
+                    <field name="total_cost"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vue Kanban -->
+        <record id="view_intervention_request_kanban" model="ir.ui.view">
+            <field name="name">intervention.request.kanban</field>
+            <field name="model">intervention.request</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_small_column">
+                    <field name="title"/>
+                    <field name="partner_id"/>
+                    <field name="technician_id"/>
+                    <field name="priority"/>
+                    <field name="state"/>
+                    <field name="scheduled_date"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_content">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="title"/>
+                                            </strong>
+                                        </div>
+                                        <div class="o_kanban_record_top_right">
+                                            <field name="priority" widget="priority"/>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_record_body">
+                                        <field name="partner_id"/>
+                                        <br/>
+                                        <i class="fa fa-user"/> <field name="technician_id"/>
+                                        <br/>
+                                        <i class="fa fa-calendar"/> <field name="scheduled_date"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_intervention_request_all" model="ir.actions.act_window">
+            <field name="name">Toutes les demandes d'intervention</field>
+            <field name="res_model">intervention.request</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="action_intervention_request_my" model="ir.actions.act_window">
+            <field name="name">Mes interventions</field>
+            <field name="res_model">intervention.request</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('technician_id', '=', uid)]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="action_intervention_request_kanban" model="ir.actions.act_window">
+            <field name="name">Planification des interventions</field>
+            <field name="res_model">intervention.request</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+        </record>
+
+        <!-- Vue catégories -->
+        <record id="view_intervention_category_tree" model="ir.ui.view">
+            <field name="name">intervention.category.tree</field>
+            <field name="model">intervention.category</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_intervention_category_form" model="ir.ui.view">
+            <field name="name">intervention.category.form</field>
+            <field name="model">intervention.category</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="color" widget="color"/>
+                        </group>
+                        <field name="description"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_intervention_category" model="ir.actions.act_window">
+            <field name="name">Catégories d'intervention</field>
+            <field name="res_model">intervention.category</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>

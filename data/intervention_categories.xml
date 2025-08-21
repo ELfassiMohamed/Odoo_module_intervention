@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="category_maintenance" model="intervention.category">
+            <field name="name">Maintenance préventive</field>
+            <field name="description">Maintenance programmée et préventive</field>
+            <field name="color">3</field>
+        </record>
+        
+        <record id="category_repair" model="intervention.category">
+            <field name="name">Réparation</field>
+            <field name="description">Intervention de réparation suite à une panne</field>
+            <field name="color">1</field>
+        </record>
+        
+        <record id="category_installation" model="intervention.category">
+            <field name="name">Installation</field>
+            <field name="description">Installation de nouveaux équipements</field>
+            <field name="color">5</field>
+        </record>
+        
+        <record id="category_consultation" model="intervention.category">
+            <field name="name">Consultation technique</field>
+            <field name="description">Consultation et diagnostic technique</field>
+            <field name="color">7</field>
+        </record>
+    </data>
+</odoo>

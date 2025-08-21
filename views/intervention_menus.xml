@@ -1,109 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-        <!-- Menu principal Interventions -->
-        <menuitem id="menu_interventions_main"
-                  name="Interventions"
-                  sequence="50"
-                  web_icon="interventions,static/description/icon.png"/>
-
-        <!-- Sous-menu Interventions -->
-        <menuitem id="menu_interventions_tickets"
-                  name="Tickets d'intervention"
-                  parent="menu_interventions_main"
+        <!-- Menu principal -->
+        <menuitem id="menu_intervention_main"
+                  name="Gestion des Interventions"
+                  sequence="10"
+                  web_icon="intervention_management,static/description/icon.png"/>
+        
+        <!-- Menu Demandes -->
+        <menuitem id="menu_intervention_requests"
+                  name="Demandes"
+                  parent="menu_intervention_main"
                   sequence="10"/>
-
-        <!-- Action pour tous les tickets d'intervention -->
-        <record id="action_intervention_tickets_all" model="ir.actions.act_window">
-            <field name="name">Toutes les interventions</field>
-            <field name="res_model">helpdesk.ticket</field>
-            <field name="view_mode">kanban,tree,form,calendar</field>
-            <field name="domain">[('is_intervention', '=', True)]</field>
-            <field name="context">{'default_is_intervention': True}</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'kanban', 'view_id': ref('ticket_intervention_kanban_view')}),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('ticket_intervention_tree_view')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('helpdesk_ticket_intervention_form_view')})]"/>
-        </record>
-
-        <menuitem id="menu_intervention_tickets_all"
-                  name="Toutes les interventions"
-                  parent="menu_interventions_tickets"
-                  action="action_intervention_tickets_all"
+        
+        <menuitem id="menu_intervention_requests_all"
+                  name="Toutes les demandes"
+                  parent="menu_intervention_requests"
+                  action="action_intervention_request_all"
                   sequence="10"/>
-
-        <!-- Action pour interventions urgentes -->
-        <record id="action_intervention_tickets_urgent" model="ir.actions.act_window">
-            <field name="name">Interventions urgentes</field>
-            <field name="res_model">helpdesk.ticket</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="domain">[('is_intervention', '=', True), ('urgency_level', 'in', ['high', 'critical'])]</field>
-            <field name="context">{'default_is_intervention': True, 'default_urgency_level': 'high'}</field>
-        </record>
-
-        <menuitem id="menu_intervention_tickets_urgent"
-                  name="Interventions urgentes"
-                  parent="menu_interventions_tickets"
-                  action="action_intervention_tickets_urgent"
-                  sequence="20"/>
-
-        <!-- Action pour mes interventions (technicien) -->
-        <record id="action_intervention_tickets_my" model="ir.actions.act_window">
-            <field name="name">Mes interventions</field>
-            <field name="res_model">helpdesk.ticket</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="domain">[('is_intervention', '=', True), ('assigned_technician_id', '=', uid)]</field>
-            <field name="context">{'default_is_intervention': True, 'default_assigned_technician_id': uid}</field>
-        </record>
-
-        <menuitem id="menu_intervention_tickets_my"
+        
+        <menuitem id="menu_intervention_requests_my"
                   name="Mes interventions"
-                  parent="menu_interventions_tickets"
-                  action="action_intervention_tickets_my"
-                  sequence="30"/>
-
-        <!-- Sous-menu Configuration -->
-        <menuitem id="menu_interventions_config"
-                  name="Configuration"
-                  parent="menu_interventions_main"
-                  sequence="90"/>
-
-        <!-- Menu Techniciens -->
-        <menuitem id="menu_intervention_technicians"
-                  name="Techniciens"
-                  parent="menu_interventions_config"
-                  action="action_intervention_technicians"
-                  sequence="10"/>
-
-        <!-- Menu Spécialités -->
-        <menuitem id="menu_intervention_specialties"
-                  name="Spécialités"
-                  parent="menu_interventions_config"
-                  action="action_intervention_specialties"
+                  parent="menu_intervention_requests"
+                  action="action_intervention_request_my"
                   sequence="20"/>
-
-        <!-- Menu Pièces utilisées -->
-        <menuitem id="menu_intervention_product_lines"
-                  name="Pièces utilisées"
-                  parent="menu_interventions_config"
-                  action="action_intervention_product_lines"
-                  sequence="30"/>
-
-        <!-- Action création rapide intervention -->
-        <record id="action_create_intervention_ticket" model="ir.actions.act_window">
-            <field name="name">Nouvelle intervention</field>
-            <field name="res_model">helpdesk.ticket</field>
-            <field name="view_mode">form</field>
-            <field name="context">{'default_is_intervention': True}</field>
-            <field name="target">new</field>
-        </record>
-
-        <menuitem id="menu_create_intervention_ticket"
-                  name="Nouvelle intervention"
-                  parent="menu_interventions_tickets"
-                  action="action_create_intervention_ticket"
-                  sequence="5"/>
-
+        
+        <!-- Menu Planification -->
+        <menuitem id="menu_intervention_planning"
+                  name="Planification"
+                  parent="menu_intervention_main"
+                  sequence="20"
+                  groups="group_intervention_dispatcher"/>
+        
+        <menuitem id="menu_intervention_planning_kanban"
+                  name="Vue Kanban"
+                  parent="menu_intervention_planning"
+                  action="action_intervention_request_kanban"
+                  sequence="10"/>
+        
+        <!-- Menu Configuration -->
+        <menuitem id="menu_intervention_config"
+                  name="Configuration"
+                  parent="menu_intervention_main"
+                  sequence="30"
+                  groups="group_intervention_dispatcher"/>
+        
+        <menuitem id="menu_intervention_categories"
+                  name="Catégories"
+                  parent="menu_intervention_config"
+                  action="action_intervention_category"
+                  sequence="10"/>
     </data>
 </odoo>

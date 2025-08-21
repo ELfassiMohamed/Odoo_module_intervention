@@ -1,7 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_intervention_product_line_user,intervention.product.line.user,model_intervention_product_line,base.group_user,1,1,1,1
-access_intervention_product_line_manager,intervention.product.line.manager,model_intervention_product_line,helpdesk.group_helpdesk_manager,1,1,1,1
-access_intervention_specialty_user,intervention.specialty.user,model_intervention_specialty,base.group_user,1,0,0,0
-access_intervention_specialty_manager,intervention.specialty.manager,model_intervention_specialty,helpdesk.group_helpdesk_manager,1,1,1,1
-access_intervention_technician_user,res.users.technician.user,base.model_res_users,base.group_user,1,0,0,0
-access_intervention_technician_manager,res.users.technician.manager,base.model_res_users,helpdesk.group_helpdesk_manager,1,1,1,0
+access_intervention_category_all,intervention.category,model_intervention_category,,1,0,0,0
+access_intervention_category_dispatcher,intervention.category dispatcher,model_intervention_category,group_intervention_dispatcher,1,1,1,1
+access_intervention_request_client,intervention.request client,model_intervention_request,group_intervention_client,1,1,1,0
+access_intervention_request_technician,intervention.request technician,model_intervention_request,group_intervention_technician,1,1,0,0
+access_intervention_request_dispatcher,intervention.request dispatcher,model_intervention_request,group_intervention_dispatcher,1,1,1,1

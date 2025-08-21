@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Catégorie de sécurité -->
+        <record id="module_category_interventions" model="ir.module.category">
+            <field name="name">Gestion des Interventions</field>
+            <field name="description">Gestion des droits d'accès pour les interventions techniques</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- Groupe Client -->
+        <record id="group_intervention_client" model="res.groups">
+            <field name="name">Client</field>
+            <field name="category_id" ref="module_category_interventions"/>
+            <field name="comment">Peut créer et consulter ses demandes d'intervention</field>
+        </record>
+
+        <!-- Groupe Technicien -->
+        <record id="group_intervention_technician" model="res.groups">
+            <field name="name">Technicien</field>
+            <field name="category_id" ref="module_category_interventions"/>
+            <field name="comment">Peut consulter et traiter les interventions qui lui sont assignées</field>
+        </record>
+
+        <!-- Groupe Dispatcher -->
+        <record id="group_intervention_dispatcher" model="res.groups">
+            <field name="name">Dispatcher</field>
+            <field name="category_id" ref="module_category_interventions"/>
+            <field name="comment">Peut gérer toutes les interventions, assigner les techniciens et créer les factures</field>
+            <field name="implied_ids" eval="[(4, ref('group_intervention_technician'))]"/>
+        </record>
+    </data>
+</odoo>

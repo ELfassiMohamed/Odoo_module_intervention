@@ -4,34 +4,20 @@
     'category': '',
     'summary': 'Gestion des interventions techniques basée sur HelpDesk',
     'author': 'EL FASSI Mohamed',
-   'depends': [
-        'helpdesk',
-        'stock',
-        'account',
-        'hr',
-        'base_geolocalize'
-    ],
-    'data': [
-        # Sécurité
-        'security/ir.model.access.csv',
-        
-        # Données
-        'data/helpdesk_teams_data.xml',
-        'data/helpdesk_stages_data.xml',
-        'data/intervention_sequences.xml',
-        
-        # Vues
-        'views/ticket_intervention_views.xml',
-        'views/intervention_technician_views.xml',
-        'views/intervention_product_line_views.xml',
-        'views/intervention_menus.xml',
-        'views/res_partner_views.xml',
-    ],
-    'demo': [
-        'demo/intervention_demo.xml',
-    ],
+    'depends': ['base', 'sale', 'account', 'hr'],
+    'application': True,
     'installable': True,
     'auto_install': False,
-    'application': False,
+    'data': [
+        'security/security_groups.xml',
+        'security/ir.model.access.csv',
+        'data/intervention_categories.xml',
+        'views/intervention_request_views.xml',
+        'views/intervention_menus.xml',
+        'report/intervention_report_template.xml',
+        'report/intervention_report.xml',
+    ],
+    'demo': [],
     'license': 'LGPL-3',
+
 }
