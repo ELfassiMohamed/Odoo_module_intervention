@@ -53,28 +53,6 @@
                             </div>
                         </div>
                         
-                        <div class="row mt-3" t-if="o.product_ids">
-                            <div class="col-12">
-                                <h5>Matériel utilisé :</h5>
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Produit</th>
-                                            <th class="text-right">Prix</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr t-foreach="o.product_ids" t-as="product">
-                                            <td><span t-field="product.name"/></td>
-                                            <td class="text-right">
-                                                <span t-field="product.list_price" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
                         <div class="row mt-4">
                             <div class="col-8">
                                 <h5>Récapitulatif financier :</h5>

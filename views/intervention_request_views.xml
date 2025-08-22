@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Vue formulaire -->
+        <!-- Vue formulaire SIMPLIFIÉE -->
         <record id="view_intervention_request_form" model="ir.ui.view">
             <field name="name">intervention.request.form</field>
             <field name="model">intervention.request</field>
@@ -9,19 +9,15 @@
                 <form>
                     <header>
                         <button name="action_assign" string="Assigner" type="object" 
-                                class="oe_highlight" states="draft" 
-                                groups="intervention_management.group_intervention_dispatcher"/>
+                                class="oe_highlight" invisible="state != 'draft'"/>
                         <button name="action_start" string="Démarrer" type="object" 
-                                class="oe_highlight" states="assigned" 
-                                groups="intervention_management.group_intervention_technician"/>
+                                class="oe_highlight" invisible="state != 'assigned'"/>
                         <button name="action_complete" string="Terminer" type="object" 
-                                class="oe_highlight" states="in_progress" 
-                                groups="intervention_management.group_intervention_technician"/>
+                                class="oe_highlight" invisible="state != 'in_progress'"/>
                         <button name="action_create_invoice" string="Facturer" type="object" 
-                                class="oe_highlight" states="completed" 
-                                groups="intervention_management.group_intervention_dispatcher"/>
+                                class="oe_highlight" invisible="state != 'completed'"/>
                         <button name="action_cancel" string="Annuler" type="object" 
-                                states="draft,assigned"/>
+                                invisible="state not in ('draft', 'assigned')"/>
                         <field name="state" widget="statusbar" 
                                statusbar_visible="draft,assigned,in_progress,completed,invoiced"/>
                     </header>
@@ -75,7 +71,7 @@
                                     <field name="invoice_id" readonly="1"/>
                                 </group>
                             </page>
-                            <page string="Signature" states="completed,invoiced">
+                            <page string="Signature" invisible="state not in ('completed', 'invoiced')">
                                 <group>
                                     <field name="client_signature" widget="image"/>
                                     <field name="signature_date"/>
@@ -83,11 +79,6 @@
                             </page>
                         </notebook>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
-                    </div>
                 </form>
             </field>
         </record>

@@ -13,6 +13,7 @@ class InterventionCategory(models.Model):
 class InterventionRequest(models.Model):
     _name = 'intervention.request'
     _description = 'Demande d\'intervention'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'priority desc, create_date desc'
     _rec_name = 'title'
 
@@ -36,8 +37,7 @@ class InterventionRequest(models.Model):
     ], string='Priorité', default='1', required=True)
     
     # Assignation
-    technician_id = fields.Many2one('res.users', string='Technicien assigné', 
-                                  domain=[('groups_id', 'in', 'intervention_management.group_intervention_technician')])
+    technician_id = fields.Many2one('res.users', string='Technicien assigné')
     dispatcher_id = fields.Many2one('res.users', string='Dispatcher', 
                                   default=lambda self: self.env.user)
     
